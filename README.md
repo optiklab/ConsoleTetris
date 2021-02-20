@@ -12,6 +12,7 @@ Because I can >_<
 ## How it looks like?
 
 ```bash
+------------------
 |                |
 |       **       |
 |        **      |
@@ -28,6 +29,7 @@ Because I can >_<
 |** *   *  ****  |
 |*************** |
 -***************--
+Points earned: 200
 ```
 
 ## How to run?
