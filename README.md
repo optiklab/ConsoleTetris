@@ -43,6 +43,13 @@ Points earned: 200
 ## How to run?
 
 1. Make sure .NET Core 3.0 is installed on your Machine (any OS).
+   You can download it from here https://dotnet.microsoft.com/download.
+   
+   In case you installed some upper versions than 3.0, you will need a really minor change in *src/ConsoleTetris.csproj* in this line:
+```bash
+<TargetFramework>netcoreapp3.0</TargetFramework>
+```
+    See the appropriate values https://docs.microsoft.com/en-us/dotnet/standard/frameworks.    
 
 2. Execute commands:
 ```bash
