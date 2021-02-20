@@ -42,6 +42,19 @@ $> dotnet build
 $> dotnet run
 ```
 
+## How to play?
+
+* Left & Right Arrows - move left & right
+* Down Arrow - drop with speed
+* Space - Rotate
+* E - exit
+* R - reset
+
+## Is there end/win?
+
+I wasn't so thoughtful about this prototype. There are no WIN in the end.
+
+
 ## License
 
 I'm not sure why you would be interested in License, but in case you do - feel free to use this code in any way you need.
