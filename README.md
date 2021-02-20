@@ -2,8 +2,8 @@
 
 ## What?
 
-Simple, NOT efficient (:D), console tetris, that works on Windows, Linux and Mac in the console/terminal.
-I do not know how Tetris SHOULD be implemented, so I spent couple of evenings to make this for fun.
+Simple, NOT efficient (:D), console tetris written in C# .NET Core and works on Windows, Linux and Mac in the console/terminal.
+I do not know how Tetris SHOULD be implemented, but I spent couple of evenings to make this from scratch for fun.
 
 ## Why?
 
