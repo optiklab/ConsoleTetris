@@ -70,13 +70,13 @@ namespace ConsoleTetris
 
         public void MoveRight(int step = 1)
         {
-            BottomX += 1;
+            BottomX += step;
 
             ShapeWidth = GenerateCells();
             Project();
         }
 
-        public bool CanTurn()
+        public int ShapeWidthAfterTurn()
         {
             int state = _state;
             if (state < 3)
@@ -84,52 +84,38 @@ namespace ConsoleTetris
             else
                 state = 0;
 
-            int width = 0;
             switch (Type)
             {
                 case FigureType.Square:
-                    width = Square.ShapeWidth;
-                    break;
+                    return Square.ShapeWidth;
                 case FigureType.Stick:
                     if (state == 0 || state == 2)
-                        width = Stick.ShapeWidth1;
+                        return Stick.ShapeWidth1;
                     else
-                        width = Stick.ShapeWidth2;
-                    break;
+                        return Stick.ShapeWidth2;
                 case FigureType.ZLeft:
                     if (state == 0 || state == 2)
-                        width = ZLeft.ShapeWidth1;
+                        return ZLeft.ShapeWidth1;
                     else
-                        width = ZLeft.ShapeWidth2;
-                    break;
+                        return ZLeft.ShapeWidth2;
                 case FigureType.ZRight:
                     if (state == 0 || state == 2)
-                        width = ZRight.ShapeWidth1;
+                        return ZRight.ShapeWidth1;
                     else
-                        width = ZRight.ShapeWidth2;
-                    break;
+                        return ZRight.ShapeWidth2;
                 case FigureType.LLeft:
                     if (state == 0 || state == 2)
-                        width = LLeft.ShapeWidth1;
+                        return LLeft.ShapeWidth1;
                     else
-                        width = LLeft.ShapeWidth2;
-                    break;
+                        return LLeft.ShapeWidth2;
                 case FigureType.LRight:
                     if (state == 0 || state == 2)
-                        width = LRight.ShapeWidth1;
+                        return LRight.ShapeWidth1;
                     else
-                        width = LRight.ShapeWidth2;
-                    break;
+                        return LRight.ShapeWidth2;
                 default:
                     throw new ArgumentException("FigureType is not declared!");
             }
-
-            if (width + BottomX > _fieldWidth - 1)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         public void Turn() // TurnLeft

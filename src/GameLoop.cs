@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,7 +13,14 @@ namespace ConsoleTetris
         private int _height;
         private int _width;
         private int _pointsEarned;
+        private readonly Random _rnd;
 
+        public static readonly IList<string> Phrases = new ReadOnlyCollection<string>
+        (new[] {
+            "WOW! NICE!",
+            "DOING GOOD!",
+            "YOU ARE THE BEST!"
+        });
         private static int _commandMultiplier;
         private static Queue<Commands> _commands;
         private static Object _sync = new Object();
@@ -26,6 +34,7 @@ namespace ConsoleTetris
             _width = width;
             _pointsEarned = 0;
             _commandMultiplier = 1;
+            _rnd = new Random();
         }
 
         public void Run()
@@ -47,18 +56,17 @@ namespace ConsoleTetris
             _renderBuffer = new StringBuilder(_width);
             _commandsToLog = new StringBuilder();
 
-            int levelsToKill = 0;
-            int maxYToKill = -1;
+            List<int> levelsToKill = new List<int>();
 
             while (true)
             {
                 Console.Clear();
 
-                if (!KillLevels(ground, levelsToKill, maxYToKill)) // Kill levels marked during last iteration.
+                if (!KillLevels(ground, levelsToKill)) // Kill levels marked during last iteration.
                 {
-                    maxYToKill = DetectAndMarkLevelsToKill(ground, out levelsToKill); // Mark levels that need to be killed...
+                    levelsToKill = DetectAndMarkLevelsToKill(ground); // Mark levels that need to be killed...
 
-                    if (levelsToKill == 0) // ...if would found so, world will be on pause for 1 iteration.
+                    if (!levelsToKill.Any()) // ...if would found so, world will be on pause for 1 iteration.
                     {
                         if (IsTouchdown(figure, ground))
                         {
@@ -66,6 +74,7 @@ namespace ConsoleTetris
                             {
                                 _commands.Clear(); // Forget all previous commands that were not executed.
                                 _commandsToLog.Clear();
+                                _commandMultiplier = 1;
                             }
 
                             // Copy figure to ground:
@@ -82,10 +91,8 @@ namespace ConsoleTetris
                 }
                 else
                 {
-                    _pointsEarned += levelsToKill * 100;
+                    _pointsEarned += levelsToKill.Count * 100;
                 }
-
-                HandleUserInput(figure);
 
                 Cell[] frame = CreateFrame(ground.Cells, gameField.Cells, figure);
 
@@ -95,6 +102,11 @@ namespace ConsoleTetris
 
                 RenderFrame(frame, figure);
 
+                if (!HandleUserInput(figure, ground))
+                {
+                    break;
+                }
+
                 Thread.Sleep(400);
             }
         }
@@ -102,7 +114,6 @@ namespace ConsoleTetris
         private static void ListenKeys()
         {
             Commands lastCommand = Commands.None;
-
             while (true)
             {
                 if (Console.KeyAvailable)
@@ -143,9 +154,14 @@ namespace ConsoleTetris
                     {
                         lock (_sync)
                         {
-                            if (command == lastCommand && _commands.Count > 1)
+                            if (_commands.Count > 2 && lastCommand == command)
                             {
-                                _commandMultiplier = 2;
+                                while (_commands.Count > 1) // Forget all commands from queue. Use waited long.
+                                {
+                                    _commands.Dequeue();
+                                }
+                                _commandMultiplier = 3;
+
                                 lastCommand = Commands.None;
                             }
                             else
@@ -163,57 +179,56 @@ namespace ConsoleTetris
             }
         }
 
-        private bool KillLevels(Ground ground, int levelsToKill, int maxYToKill)
+        private bool KillLevels(Ground ground, List<int> levelsToKill)
         {
-            if (ground.Cells.Any(c => c.Value == "O"))
+            if (levelsToKill.Any())
             {
-                List<Cell> groundCellsAlive = new List<Cell>();
-                for (int i = 0; i < ground.Cells.Count; i++)
+                levelsToKill.Sort();
+                int counter = 0;
+
+                for (int i = 0; i < levelsToKill.Count; i++)
                 {
-                    Cell currentCell = ground.Cells[i];
-
-                    if (currentCell.Value != "O")
+                    for (int j = 0; j < ground.Cells.Count; j++)
                     {
-                        if (currentCell.Y > maxYToKill)
+                        if (ground.Cells[j].Y > levelsToKill[i] - counter)
                         {
-                            currentCell.Y -= levelsToKill;
+                            Cell cell = ground.Cells[j];
+                            cell.Y -= 1;
+                            ground.Cells[j] = cell;
                         }
-
-                        groundCellsAlive.Add(currentCell);
                     }
+
+                    ++counter;
                 }
-                ground.Cells.Clear();
-                ground.Cells.AddRange(groundCellsAlive);
+
+                ground.Cells = ground.Cells.Where(c => c.Value != "O").ToList();
+
+                int index = _rnd.Next(0, Phrases.Count - 1);
+                Console.Clear();
+                Console.WriteLine(Phrases[index]);
 
                 return true;
             }
             return false;
         }
 
-        private int DetectAndMarkLevelsToKill(Ground ground, out int levelsToKill)
+        private List<int> DetectAndMarkLevelsToKill(Ground ground)
         {
-            int maxYtoKill = -1;
-
             // Find all levels to deminish
-            var groups = ground.Cells.GroupBy(c => c.Y);
-            List<int> levels = new List<int>();
+            var groups = ground.Cells
+                .Where(c => c.Value != " ") // Non-empty
+                .GroupBy(c => c.Y);
+            List<int> levelsToKill = new List<int>();
             foreach (var group in groups)
             {
-                if (group.Count() == _width - 2) // magic number is 2 frames, left and right // TODO 
+                if (group.Count() >= _width - 2) // magic number is 2 frames, left and right
                 {
-                    int curY = group.First().Y;
-
-                    levels.Add(curY);
-
-                    if (curY > maxYtoKill)
-                    {
-                        maxYtoKill = curY;
-                    }
+                    levelsToKill.Add(group.Key); //Y
                 }
             }
 
             // Mark as bombed
-            foreach (int level in levels)
+            foreach (int level in levelsToKill)
             {
                 for (int i = 0; i < ground.Cells.Count; i++)
                 {
@@ -226,9 +241,7 @@ namespace ConsoleTetris
                 }
             }
 
-            levelsToKill = levels.Count;
-
-            return maxYtoKill;
+            return levelsToKill;
         }
 
         private bool IsTouchdown(ActiveFigure figure, Ground ground)
@@ -237,9 +250,10 @@ namespace ConsoleTetris
             {
                 foreach (Cell groundCell in ground.Cells)
                 {
-                    if (groundCell.X == figureCell.X &&
-                        groundCell.Y + 1 == figureCell.Y &&
-                        figureCell.Value != " ")
+                    if (figureCell.Value != " " &&
+                        groundCell.Value != " " &&
+                        groundCell.X == figureCell.X &&
+                        groundCell.Y + 1 == figureCell.Y)
                     {
                         return true;
                     }
@@ -254,7 +268,7 @@ namespace ConsoleTetris
             return false;
         }
 
-        private void HandleUserInput(ActiveFigure figure)
+        private bool HandleUserInput(ActiveFigure figure, Ground ground)
         {
             if (_commands.Any())
             {
@@ -268,20 +282,25 @@ namespace ConsoleTetris
                 switch (command)
                 {
                     case Commands.Down:
-                        if (figure.BottomY > 1)
+                        if (figure.BottomY > 4 && CanMoveDown(figure, ground, 2))
                             figure.MoveNext(2);
                         break;
                     case Commands.Left:
-                        if (figure.BottomX > 1)
+                        if (figure.BottomX > _commandMultiplier && CanMoveLeft(figure, ground, _commandMultiplier))
                             figure.MoveLeft(_commandMultiplier);
                         break;
                     case Commands.Right:
-                        if (figure.BottomX + figure.ShapeWidth < _width - 1)
-                            figure.MoveRight(_commandMultiplier);
+                        if (figure.BottomX + figure.ShapeWidth < _width - 1 && CanMoveRight(figure, ground, _commandMultiplier))
+                            figure.MoveRight(
+                                (figure.BottomX + figure.ShapeWidth + _commandMultiplier >= _width - 1) ?
+                                    1 : _commandMultiplier);
                         break;
                     case Commands.Rotate:
-                        if (figure.CanTurn())
+                        int width = figure.ShapeWidthAfterTurn();
+                        if (width + figure.BottomX <= _width - 1) // Is in screen limits still?
+                        {
                             figure.Turn();
+                        }
                         break;
                     case Commands.Pause:
                         //??
@@ -293,10 +312,66 @@ namespace ConsoleTetris
                     default:
                         Console.Clear();
                         Console.WriteLine("BYE! THANK YOU!");
-                        return;
+                        return false;
                 }
-                _commandMultiplier = 1;
             }
+            _commandMultiplier = 1;
+            return true;
+        }
+
+        private bool CanMoveLeft(ActiveFigure figure, Ground ground, int step)
+        {
+            foreach (Cell figureCell in figure.Cells)
+            {
+                foreach (Cell groundCell in ground.Cells)
+                {
+                    if (figureCell.Value != " " &&
+                        groundCell.Value != " " &&
+                        groundCell.Y == figureCell.Y &&
+                        figureCell.X - step == groundCell.X)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private bool CanMoveRight(ActiveFigure figure, Ground ground, int step)
+        {
+            foreach (Cell figureCell in figure.Cells)
+            {
+                foreach (Cell groundCell in ground.Cells)
+                {
+                    if (figureCell.Value != " " &&
+                        groundCell.Value != " " &&
+                        groundCell.Y == figureCell.Y &&
+                        figureCell.X + step == groundCell.X)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private bool CanMoveDown(ActiveFigure figure, Ground ground, int step)
+        {
+            foreach (Cell figureCell in figure.Cells)
+            {
+                foreach (Cell groundCell in ground.Cells)
+                {
+                    if (figureCell.Value != " " &&
+                        groundCell.Value != " " &&
+                        groundCell.X == figureCell.X &&
+                        groundCell.Y + step == figureCell.Y)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private Cell[] CreateFrame(List<Cell> groundCells, List<Cell> gameFieldCells, ActiveFigure figure)
@@ -364,6 +439,7 @@ namespace ConsoleTetris
 
             Console.WriteLine("Points earned: " + _pointsEarned.ToString());
             Console.WriteLine("Commands queued: " + _commandsToLog.ToString());
+            Console.WriteLine("Multiplier: " + _commandMultiplier.ToString());
         }
     }
 }

@@ -12,6 +12,8 @@ namespace ConsoleTetris
             var game = new GameLoop(Width, Height);
 
             game.Run();
+
+            Console.WriteLine("Press Ctrl+C to exit!");
         }
     }
 }
