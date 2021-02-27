@@ -1,9 +1,16 @@
 # ConsoleTetris
 
+|Branch      |Status   |
+|------------|---------|
+|master      | [![Build Status](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main)](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main) |
+
 ## What?
 
 Simple, NOT efficient (:D), console tetris written in C# .NET Core and works on Windows, Linux and Mac in the console/terminal.
 I do not know how Tetris SHOULD be implemented, but I spent couple of evenings to make this from scratch for fun.
+
+
+
 
 ## Why not efficient?
 
