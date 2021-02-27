@@ -3,5 +3,6 @@ solution: src/ConsoleTetris.sln
 mono: none
 dotnet: 3.0
 script:
+ - cd src
  - dotnet restore
  - dotnet build
