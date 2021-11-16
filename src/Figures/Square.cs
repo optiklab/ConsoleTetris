@@ -10,7 +10,7 @@ namespace ConsoleTetris.Figures
         public static readonly IList<Cell> Cells = new ReadOnlyCollection<Cell>
             (new[] {
             // As you can see, figure shape contains both filled and empty cells.
-            // We have to handle this during collision detection.
+            //   We have to handle this during collision detection.
                 new Cell (0, 0, "*"),
                 new Cell (0, 1, "*"),
                 new Cell (1, 0, "*"),

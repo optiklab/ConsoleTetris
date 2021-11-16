@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ConsoleTetris.Display
 {
+    /// <summary>
+    /// Contains a StringBuilder instance and methods to fill it and output to console
+    /// </summary>
     public class ConsoleScreen
     {
         private StringBuilder _renderBuffer;
@@ -12,8 +15,11 @@ namespace ConsoleTetris.Display
         {
             // Avoid blinking by optimizing the buffering space in console
             // https://stackoverflow.com/questions/28490246/console-clear-blinking
-            Console.SetWindowSize(2 * width, 2 * height);
-            Console.SetBufferSize(2 * width + 1, 2 * height + 1);
+
+            //Console.SetWindowSize(2 * width, 2 * height);
+            //Console.SetBufferSize(2 * width + 1, 2 * height + 1);
+            //      // These methods work only on Windows. *nix, where console is even not a window,
+            //      //   has not such agilty (yeah, pure linux doesn't have gui)
 
             _renderBuffer = new StringBuilder(width);
         }

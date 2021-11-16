@@ -63,6 +63,9 @@ namespace ConsoleTetris
             return _currentFrameBuffer;
         }
 
+        /// <summary>
+        /// Returns a bool instance that indicates whether active figure is touched the ground bottom
+        /// </summary>
         public bool Calculate()
         {
             bool result = false;
@@ -72,13 +75,13 @@ namespace ConsoleTetris
                 _levelsToKill = DetectAndMarkLevelsToKill(_ground); // Mark levels that need to be killed...
 
                 if (!_levelsToKill.Any()) // ...if would found so, world will be on pause for 1 iteration.
-                {
+                {                         //   ****can't see where is code to pause the world
                     if (IsTouchdown(_figure, _ground))
                     {
                         result = true;
 
                         // Copy figure to ground:
-                        // only non-empty cells of the figure to do not override non-empty ground cells.
+                        //   only non-empty cells of the figure to do not override non-empty ground cells.
                         _ground.Cells.AddRange(_figure.Cells.Where(c => c.Value != " "));
                         _figure.ReInit();
                     }
@@ -231,7 +234,8 @@ namespace ConsoleTetris
 
                 for (int j = 0; j < frame.Length; j++)
                 {
-                    if (frame[j].X == cell.X && frame[j].Y == cell.Y)
+                    //if (frame[j].X == cell.X && frame[j].Y == cell.Y)
+                    if (frame[j].CompareTo(cell) == 0)
                     {
                         // A-la z-buffering:
                         string oldValue = frame[j].Value;

@@ -129,6 +129,10 @@ namespace ConsoleTetris
             Project();
         }
 
+        /// <summary>
+        /// Clears existing cells and generates new ones according to the figure type and state.
+        //  New ones have default coordinates
+        /// <summary>
         private int GenerateCells()
         {
             Cells.Clear();
@@ -219,13 +223,13 @@ namespace ConsoleTetris
         }
 
         /// <summary>
-        /// Makes a projection
+        /// Sets cells of the figure to right coordinates
         /// </summary>
         private void Project()
         {
             for (int i = 0; i < Cells.Count; i++)
             {
-                var cell = Cells[i];
+                Cell cell = Cells[i];
                 cell.X += BottomX;
                 cell.Y += BottomY;
                 Cells[i] = cell;
