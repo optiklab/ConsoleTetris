@@ -17,19 +17,20 @@ namespace ConsoleTetris
             //Color = 0;
         }
 
-        public static int Compare(int a, int b)
-        {
-            if (a > b)
-            {
-                return 1;
-            }
-            else if (a < b)
-            {
-                return -1;
-            }
-
-            return 0;
-        }
+        //public static int Compare(int a, int b)
+        //{
+        //    if (a > b)
+        //    {
+        //        return 1;
+        //    }
+        //    else if (a < b)
+        //    {
+        //        return -1;
+        //    }
+        //
+        //    return 0;
+        //}
+        //      // Postoned to better times
 
         public int CompareTo(Cell other)
         {

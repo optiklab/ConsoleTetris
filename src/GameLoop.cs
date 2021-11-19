@@ -140,6 +140,9 @@ namespace ConsoleTetris
             }
         }
 
+        /// <summary>
+        /// Returns a bool instance that indicates whether it's Commands.Exit
+        /// </summary>
         private bool HandleUserInput(Scene scene)
         {
             if (_commands.Any())
@@ -167,7 +170,15 @@ namespace ConsoleTetris
                         scene.HandleRotate();
                         break;
                     case Commands.Pause:
-                        //??
+                        _commands.Clear();
+                        while (true)
+                        {
+                            lock (_sync)
+                                _commands.TryDequeue(out command);
+                            if (command == Commands.Pause)
+                                break;
+                            Thread.Sleep(100);
+                        }
                         break;
                     case Commands.Reset:
                         Run();

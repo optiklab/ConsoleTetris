@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace ConsoleTetris
 {
+    
+    /// <summary>
+    /// Just a wrapper for List<Cell> container
+    /// </summary>
     public class Ground
     {
         public List<Cell> Cells = new List<Cell>();
