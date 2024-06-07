@@ -4,25 +4,17 @@
 |------------|---------|
 |master      | [![Build Status](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main)](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main) |
 
-## What?
+## Play?
 
-Simple, NOT efficient (:D), console tetris written in C# .NET Core and works on Windows, Linux and Mac in the console/terminal.
-I do not know how Tetris SHOULD be implemented, but I spent couple of evenings to make this from scratch for fun.
-
-
-
-
-## Why not efficient?
-
-Because I can >_<
-
-Well, first of all, it's written with standard C# collections, instead of any kind of matrix logic. Just for simplisity of understanding.
-Secondly, it sometimes uses Linq, which is even slower from time to time.
-
-It doesn't use any kind of buffering (maybe I will play more with it and add it, but in this case I might have to rewrite everthing... so I just lazy to do it).
-It uses 2nd thread to track user input, so I have Locks to access commands collection.
-
-So, overall, not very well written, but it works. And it makes some fun.
+<p align="center">
+	You can play this game in your browser:
+	<br />
+	<a href="https://optiklab.github.io/ConsoleTetris" alt="Play Now">
+		<sub><img height="40"src="../../.github/resources/play-badge.svg" alt="Play Now"></sub>
+	</a>
+	<br />
+	<sup>Hosted On GitHub Pages</sup>
+</p>
 
 ## How it looks like?
 
