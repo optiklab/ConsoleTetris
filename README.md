@@ -10,7 +10,7 @@
 	You can play this game in your browser:
 	<br />
 	<a href="https://optiklab.github.io/ConsoleTetris" alt="Play Now">
-		<sub><img height="40"src="../.github/resources/play-badge.svg" alt="Play Now"></sub>
+		<sub><img height="40"src=".github/resources/play-badge.svg" alt="Play Now"></sub>
 	</a>
 	<br />
 	<sup>Hosted On GitHub Pages</sup>
