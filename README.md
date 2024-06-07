@@ -7,13 +7,11 @@
 ## Play?
 
 <p align="center">
-	You can play this game in your browser:
-	<br />
 	<a href="https://optiklab.github.io/ConsoleTetris" alt="Play Now">
-		<sub><img height="40"src="/.github/resources/play-badge.svg" alt="Play Now"></sub>
+		<img height="40"src="https://img.shields.io/badge/Play-Now-gray?style=flat-square&logo=github" title="Play Now" alt="Play Now"/>
 	</a>
 	<br />
-	<sup>Hosted On GitHub Pages</sup>
+	<sub>Hosted On GitHub Pages</sub>
 </p>
 
 ## How it looks like?
