@@ -4,16 +4,6 @@
 |------------|---------|
 |master      | [![Build Status](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main)](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main) |
 
-## Play?
-
-<p align="center">
-	<a href="https://optiklab.github.io/ConsoleTetris" alt="Play Now">
-		<img height="40"src="https://img.shields.io/badge/Play-Now-gray?style=flat-square&logo=github" title="Play Now" alt="Play Now"/>
-	</a>
-	<br />
-	<sub>Hosted On GitHub Pages</sub>
-</p>
-
 ## How it looks like?
 
 ```bash
