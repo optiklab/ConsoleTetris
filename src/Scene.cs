@@ -81,6 +81,14 @@ namespace ConsoleTetris
                         // only non-empty cells of the figure to do not override non-empty ground cells.
                         _ground.Cells.AddRange(_figure.Cells.Where(c => c.Value != " "));
                         _figure.ReInit();
+
+                        // Game over check after spawning new figure
+                        if (IsCollisionOnSpawn(_figure, _ground))
+                        {
+                            DrawGameOver();
+                            // Optionally: throw new Exception("Game Over");
+                            // Or set a game over flag
+                        }
                     }
                     else
                     {
@@ -95,6 +103,31 @@ namespace ConsoleTetris
             }
 
             return result;
+        }
+
+        private bool IsCollisionOnSpawn(ActiveFigure figure, Ground ground)
+        {
+            foreach (var figureCell in figure.Cells)
+            {
+                foreach (var groundCell in ground.Cells)
+                {
+                    if (figureCell.Value != " " &&
+                        groundCell.Value != " " &&
+                        groundCell.X == figureCell.X &&
+                        groundCell.Y == figureCell.Y)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void DrawGameOver()
+        {
+            Console.Clear();
+            Console.WriteLine("GAME OVER!");
+            // Optionally: Environment.Exit(0);
         }
 
         public void HandleDown()
