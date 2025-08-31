@@ -4,6 +4,8 @@
 |------------|---------|
 |master      | [![Build Status](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main)](https://api.travis-ci.com/optiklab/ConsoleTetris.svg?branch=main) |
 
+![.NET 9](https://img.shields.io/badge/.NET-9.0-purple) ![License](https://img.shields.io/badge/License-MIT-blue)
+
 ## How it looks like?
 
 https://asciinema.org/a/f5g2R77xJs2O1Ojjw6a7A9xVM
