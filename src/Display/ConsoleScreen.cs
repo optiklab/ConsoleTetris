@@ -12,8 +12,11 @@ namespace ConsoleTetris.Display
         {
             // Avoid blinking by optimizing the buffering space in console
             // https://stackoverflow.com/questions/28490246/console-clear-blinking
-            Console.SetWindowSize(2 * width, 2 * height);
-            Console.SetBufferSize(2 * width + 1, 2 * height + 1);
+            if (OperatingSystem.IsWindows())
+            {
+                Console.SetWindowSize(2 * width, 2 * height);
+                Console.SetBufferSize(2 * width + 1, 2 * height + 1);
+            }
 
             _renderBuffer = new StringBuilder(width);
         }
