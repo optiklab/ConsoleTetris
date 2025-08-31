@@ -6,6 +6,8 @@
 
 ## How it looks like?
 
+https://asciinema.org/a/f5g2R77xJs2O1Ojjw6a7A9xVM
+
 ```bash
 ------------------
 |                |
