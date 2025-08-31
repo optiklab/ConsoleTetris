@@ -29,6 +29,8 @@ https://asciinema.org/a/f5g2R77xJs2O1Ojjw6a7A9xVM
 Points earned: 200
 ```
 
+![1](https://github.com/optiklab/ConsoleTetris/blob/main/images/consoleTetris.gif)
+
 ## How to run?
 
 1. Make sure .NET Core 3.0 is installed on your Machine (any OS).
