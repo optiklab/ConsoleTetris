@@ -10,6 +10,7 @@ namespace ConsoleTetris
         private readonly int _fieldHeight;
         private readonly Random _rnd;
         private int _state;
+        private List<Cell> _baseCells; // Store the base shap
 
         public FigureType Type { get; set; }
         public int BottomX { get; set; }
@@ -33,6 +34,7 @@ namespace ConsoleTetris
             _fieldWidth = fieldWidth;
             _fieldHeight = fieldHeight;
 
+            _baseCells = new List<Cell>();
             Cells = new List<Cell>();
 
             _rnd = new Random();
@@ -131,60 +133,60 @@ namespace ConsoleTetris
 
         private int GenerateCells()
         {
-            Cells.Clear();
+            _baseCells.Clear();
 
             switch (Type)
             {
                 case FigureType.Square:
-                    Cells.AddRange(Square.Cells);
+                    _baseCells.AddRange(Square.Cells);
                     return Square.ShapeWidth;
                 case FigureType.Stick:
                     if (_state == 0 || _state == 2)
                     {
-                        Cells.AddRange(Stick.Cells1);
+                        _baseCells.AddRange(Stick.Cells1);
                         return Stick.ShapeWidth1;
                     }
                     else
                     {
-                        Cells.AddRange(Stick.Cells2);
+                        _baseCells.AddRange(Stick.Cells2);
                         return Stick.ShapeWidth2;
                     }
                 case FigureType.ZLeft:
                     if (_state == 0 || _state == 2)
                     {
-                        Cells.AddRange(ZLeft.Cells1);
+                        _baseCells.AddRange(ZLeft.Cells1);
                         return ZLeft.ShapeWidth1;
                     }
                     else
                     {
-                        Cells.AddRange(ZLeft.Cells2);
+                        _baseCells.AddRange(ZLeft.Cells2);
                         return ZLeft.ShapeWidth2;
                     }
                 case FigureType.ZRight:
                     if (_state == 0 || _state == 2)
                     {
-                        Cells.AddRange(ZRight.Cells1);
+                        _baseCells.AddRange(ZRight.Cells1);
                         return ZRight.ShapeWidth1;
                     }
                     else
                     {
-                        Cells.AddRange(ZRight.Cells2);
+                        _baseCells.AddRange(ZRight.Cells2);
                         return ZRight.ShapeWidth2;
                     }
                 case FigureType.LLeft:
                     if (_state == 0)
                     {
-                        Cells.AddRange(LLeft.Cells1);
+                        _baseCells.AddRange(LLeft.Cells1);
                         return LLeft.ShapeWidth1;
                     }
                     else if (_state == 1)
                     {
-                        Cells.AddRange(LLeft.Cells2);
+                        _baseCells.AddRange(LLeft.Cells2);
                         return LLeft.ShapeWidth2;
                     }
                     else if (_state == 2)
                     {
-                        Cells.AddRange(LLeft.Cells3);
+                        _baseCells.AddRange(LLeft.Cells3);
                         return LLeft.ShapeWidth3;
                     }
                     else // if (_state == 3)
@@ -195,22 +197,22 @@ namespace ConsoleTetris
                 case FigureType.LRight:
                     if (_state == 0)
                     {
-                        Cells.AddRange(LRight.Cells1);
+                        _baseCells.AddRange(LRight.Cells1);
                         return LRight.ShapeWidth1;
                     }
                     else if (_state == 1)
                     {
-                        Cells.AddRange(LRight.Cells2);
+                        _baseCells.AddRange(LRight.Cells2);
                         return LRight.ShapeWidth2;
                     }
                     else if (_state == 2)
                     {
-                        Cells.AddRange(LRight.Cells3);
+                        _baseCells.AddRange(LRight.Cells3);
                         return LRight.ShapeWidth3;
                     }
                     else // if (_state == 3)
                     {
-                        Cells.AddRange(LRight.Cells4);
+                        _baseCells.AddRange(LRight.Cells4);
                         return LRight.ShapeWidth4;
                     }
                 default:
@@ -223,12 +225,11 @@ namespace ConsoleTetris
         /// </summary>
         private void Project()
         {
-            for (int i = 0; i < Cells.Count; i++)
+            Cells.Clear();
+            for (int i = 0; i < _baseCells.Count; i++)
             {
-                var cell = Cells[i];
-                cell.X += BottomX;
-                cell.Y += BottomY;
-                Cells[i] = cell;
+                var cell = _baseCells[i];
+                Cells.Add(new Cell(cell.X + BottomX, cell.Y + BottomY, cell.Value));
             }
         }
     }
