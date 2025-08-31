@@ -191,7 +191,7 @@ namespace ConsoleTetris
                     }
                     else // if (_state == 3)
                     {
-                        Cells.AddRange(LLeft.Cells4);
+                        _baseCells.AddRange(LLeft.Cells4);
                         return LLeft.ShapeWidth4;
                     }
                 case FigureType.LRight:

@@ -69,39 +69,39 @@ namespace ConsoleTetris
         {
             bool result = false;
 
-            if (!KillLevels(_ground, _levelsToKill)) // Kill levels marked during last iteration.
-            {
-                _levelsToKill = DetectAndMarkLevelsToKill(_ground); // Mark levels that need to be killed...
-
-                if (!_levelsToKill.Any()) // ...if would found so, world will be on pause for 1 iteration.
-                {
-                    if (IsTouchdown(_figure, _ground))
-                    {
-                        result = true;
-
-                        // Copy figure to ground:
-                        // only non-empty cells of the figure to do not override non-empty ground cells.
-                        _ground.Cells.AddRange(_figure.Cells.Where(c => c.Value != " "));
-                        _figure.ReInit();
-
-                        // Game over check after spawning new figure
-                        if (IsCollisionOnSpawn(_figure, _ground))
-                        {
-                            DrawGameOver();
-                            // Optionally: throw new Exception("Game Over");
-                            // Or set a game over flag
-                        }
-                    }
-                    else
-                    {
-                        // Move current figure
-                        _figure.MoveNext();
-                    }
-                }
-            }
-            else
+            if (KillLevels(_ground, _levelsToKill)) // If we just burned levels
             {
                 _pointsEarned += _levelsToKill.Count * 100;
+                _levelsToKill.Clear(); // Reset so we don't keep burning
+                                       // After burning, do NOT return early; continue with normal game logic
+            }
+
+            _levelsToKill = DetectAndMarkLevelsToKill(_ground); // Mark levels that need to be killed...
+
+            if (!_levelsToKill.Any()) // ...if would found so, world will be on pause for 1 iteration.
+            {
+                if (IsTouchdown(_figure, _ground))
+                {
+                    result = true;
+
+                    // Copy figure to ground:
+                    // only non-empty cells of the figure to do not override non-empty ground cells.
+                    _ground.Cells.AddRange(_figure.Cells.Where(c => c.Value != " "));
+                    _figure.ReInit();
+
+                    // Game over check after spawning new figure
+                    if (IsCollisionOnSpawn(_figure, _ground))
+                    {
+                        DrawGameOver();
+                        // Optionally: throw new Exception("Game Over");
+                        // Or set a game over flag
+                    }
+                }
+                else
+                {
+                    // Move current figure
+                    _figure.MoveNext();
+                }
             }
 
             return result;
