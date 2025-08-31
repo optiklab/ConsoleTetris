@@ -9,6 +9,8 @@ namespace ConsoleTetris
 {
     public class Scene
     {
+        private const int BorderWidth = 2;
+
         private readonly int _width;
         private readonly int _height;
 
@@ -201,7 +203,7 @@ namespace ConsoleTetris
             List<int> levelsToKill = new List<int>();
             foreach (var group in groups)
             {
-                if (group.Count() >= _width - 2) // magic number is 2 frames, left and right
+                if (group.Count() >= _width - BorderWidth) // magic number is 2 frames, left and right
                 {
                     levelsToKill.Add(group.Key); //Y
                 }
